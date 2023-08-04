@@ -1,0 +1,7 @@
+					Excited to clone twitter (backend and fronetend)
+
+Deliverables with time estimation:( Will add estimation before starting work on a module and update 'completed_in' once done)
+
+1. Registration (alongwith google API) :
+	*Expected :    3 hours
+	*completed_in: ...
