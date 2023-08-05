@@ -1,5 +1,5 @@
 import './App.css';
-import Spinner from './Components/Spinner/Spinner.tsx';
+import Spinner from './Components/Spinner/Spinner';
 import Register from './Screens/Register/Register.js';
 
 function App() {

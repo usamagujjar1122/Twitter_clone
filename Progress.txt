@@ -8,8 +8,13 @@ Deliverables with time estimation:( Will add estimation before starting work on 
 	message : Ahh! light cut off. spent 1:45 hours to complete Ui of register page with mobile responsiveness.
 	Will commit before starting tomorrow ( GN:) )
 	*completed_in: 2h 45m
-    BACKEND : 
-	Pending
 2. Login:
     FRONTEND:
 	*Expected :    30 mins
+	completed :    1 hr (used react-googl-login but is deprecated, so replace wiyh oauth-google library)
+
+
+	2.1. Building backend startup along with register and login API's.
+	expected :	3 hrs
+	
+	

@@ -1,51 +1,37 @@
-import React from 'react';
-import { GoogleLogin } from 'react-google-login';
-import { Box } from '@mui/material'
-import useMediaQuery from '@mui/material/useMediaQuery';
-function GoogleSignIn() {
-  const matches = useMediaQuery('(min-width:900px)');
-  const responseGoogle_success = (response) => {
-    console.log(response);
-    // Handle user data and authentication here
-  };
-  const responseGoogle_failure = (response) => {
-    console.log(response);
-    // Handle user data and authentication here
-  };
-
+import React, { useEffect, useState } from 'react';
+import gapi from '../../Scripts/google.js'
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
+import { Stack } from '@mui/material';
+import Spinner from '../Spinner/Spinner';
+const GoogleButton = () => {
+  const [loading, setLoading] = useState(true)
+  setTimeout(() => {
+    setLoading(false)
+  }, 3000);
   return (
-    <Box sx={{
-      '& button': {
-        width: '300px !important',
-        borderRadius: '25px !important',
-        boxShadow: 'none !important',
-        backgroundColor: "black ",
-        border: '1px solid black !important',
-        padding: "0px 20px !important",
-        display: 'flex !important',
-        flexDirection: 'row-reverse !important',
-        margin: matches ? 'inherit !important' : "auto !important",
-        justifyContent: 'center !important'
-      },
-      '& button > div': {
-        padding: '7px !important',
-        marginRight: '0px !important'
-      },
-      '& button>span': {
-        padding: '7px !important'
-      }
-
-    }}>
-      <GoogleLogin
-        id="google_button"
-        clientId="106563323624-69mntmu58oj16m1a5jc5hm965ohh9n6s.apps.googleusercontent.com"
-        buttonText="Continue with Google"
-        onSuccess={responseGoogle_success}
-        onFailure={responseGoogle_failure}
-        cookiePolicy={'single_host_origin'}
-      />
-    </Box>
+    <GoogleOAuthProvider clientId="458412751595-7a4q3s5e84br5fcs4rmtm0lml6utg54r.apps.googleusercontent.com">
+      <Stack sx={{
+        width: "300px",
+        alignSelf: { xs: 'center', md: 'start' },
+        '& div': {
+          borderRadius: '25px'
+        },
+        position: 'relative'
+      }}>
+        {loading && <Spinner style={{ position: 'absolute', top: '30%', left: '50%', transform: "translate(-50%,-50%)", width: '20px', height: '20px' }} />}
+        <GoogleLogin
+          onSuccess={credentialResponse => {
+            console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+          width={300}
+        />
+      </Stack>
+    </GoogleOAuthProvider>
   );
-}
+};
 
-export default GoogleSignIn;
+export default GoogleButton;

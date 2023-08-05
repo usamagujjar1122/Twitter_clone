@@ -1,9 +1,12 @@
 import * as React from 'react'
 import { Stack, Box, Typography, Button } from '@mui/material';
-import GoogleSignIn from '../../Components/Register/GoogleSignUp';
+import GoogleButton from '../../Components/Register/GoogleSignUp';
 import StepsModel from '../../Components/Register/Steps.model';
+import LoginModel from '../../Components/Login/Login.model';
 const Register = () => {
   const [open, setopen] = React.useState(false)
+  const [login_open, set_login_open] = React.useState(false)
+
   return (
     <Stack
       sx={{
@@ -79,7 +82,7 @@ const Register = () => {
             }}>
             Join today.
           </Typography>
-          <GoogleSignIn />
+          <GoogleButton />
           <Stack sx={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -147,9 +150,11 @@ const Register = () => {
 
               }
             }}
+              onClick={() => set_login_open(true)}
             >
               Sign In
             </Button>
+            <LoginModel open={login_open} setopen={set_login_open} />
           </Stack>
         </Stack>
       </Stack>
