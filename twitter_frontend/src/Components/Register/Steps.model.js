@@ -16,9 +16,6 @@ const style = {
 
 
 export default function StepsModel({ open, setopen }) {
-  const handleOpen = () => {
-    setopen(true);
-  };
   const handleClose = () => {
     setopen(false);
   };
@@ -34,10 +31,11 @@ export default function StepsModel({ open, setopen }) {
         <Stack sx={{
           ...style,
           width: { xs: "100%", md: "600px" },
-          height: { xs: "100%", md: "auto" },
+          minHeight: { xs: "100%", md: "80%" },
           borderRadius: { xs: "none", md: '10px' },
           outline: 'none',
-
+          gap:'20px'
+          
         }}>
           <Steps setopen={setopen} />
         </Stack>

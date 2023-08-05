@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Modal, Stack, Typography, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
-import GoogleButton from '../Register/GoogleSignUp';
+import GoogleButton from '../../Elements/GoogleSignUp';
 
 const style = {
   position: 'absolute',
@@ -35,7 +35,7 @@ export default function LoginModel({ open, setopen }) {
         <Stack sx={{
           ...style,
           width: { xs: "100%", md: "600px" },
-          height: { xs: "100%", md: "auto" },
+          minHeight: { xs: "100%", md: "80%" },
           borderRadius: { xs: "none", md: '10px' },
           outline: 'none',
 
@@ -70,7 +70,7 @@ export default function LoginModel({ open, setopen }) {
             <Typography
               sx={{
                 fontWeight: 'bold',
-                fontSize: '26px',
+                fontSize: '28px',
               }}
             >
               Sign In to X
@@ -82,6 +82,9 @@ export default function LoginModel({ open, setopen }) {
               justifyContent: { xs: 'center', md: 'start' },
               '&>hr': {
                 height: '0.5px', width: '40%', color: 'rgba(0,0,0,0.05)', margin: '10px'
+              },
+              '&>span': {
+                marginBottom: '6px'
               },
               width: '300px',
               alignSelf: { xs: "center", md: "start" }

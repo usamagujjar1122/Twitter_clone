@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Stack, Box, Typography, Button } from '@mui/material';
-import GoogleButton from '../../Components/Register/GoogleSignUp';
+import GoogleButton from '../../Elements/GoogleSignUp';
 import StepsModel from '../../Components/Register/Steps.model';
 import LoginModel from '../../Components/Login/Login.model';
 const Register = () => {
@@ -89,6 +89,9 @@ const Register = () => {
             justifyContent: { xs: 'center', md: 'start' },
             '&>hr': {
               height: '0.5px', width: '40%', color: 'rgba(0,0,0,0.05)', margin: '10px'
+            },
+            '&>span': {
+              marginBottom: '6px'
             },
             width: '300px',
             alignSelf: { xs: "center", md: "start" }

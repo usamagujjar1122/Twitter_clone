@@ -1,0 +1,68 @@
+/* Chirp Bold */
+@font-face {
+  font-family: 'Chirp-Bold';
+  src: url('../public/fonts/chirp_bold.otf') format('opentype');
+  font-weight: bold;
+}
+
+/* Chirp Heavy */
+@font-face {
+  font-family: 'Chirp-Heavy';
+  src: url('../public/fonts/chirp_heavy.otf') format('opentype');
+  font-weight: bold;
+}
+
+/* Chirp Light */
+@font-face {
+  font-family: 'Chirp-Light';
+  src: url('../public/fonts/chirp_light.otf') format('opentype');
+  font-weight: normal;
+}
+
+/* Chirp Medium */
+@font-face {
+  font-family: 'Chirp-Medium';
+  src: url('../public/fonts/chirp_medium.otf') format('opentype');
+  font-weight: normal;
+}
+
+/* Chirp Regular */
+@font-face {
+  font-family: 'Chirp-Regular';
+  src: url('../public/fonts/chirp_regular.otf') format('opentype');
+  font-weight: normal;
+}
+
+/* Chirp Thin */
+@font-face {
+  font-family: 'Chirp-Thin';
+  src: url('../public/fonts/chirp_thin.otf') format('opentype');
+  font-weight: normal;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+span {
+  font-family: 'Chirp-Regular', sans-serif !important;
+}
+
+a {
+  color: rgb(29, 155, 240);
+  text-decoration: none;
+
+}
+
+a:hover {
+  text-decoration: underline;
+}

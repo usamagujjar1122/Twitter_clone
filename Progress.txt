@@ -26,3 +26,7 @@ Home :
     FRONTEND: 
 	Created a model to new user to upload profile and set username (45 mins)
 	*Back to coding*
+	* Timeline designs and profile designs implemented. (2 Hours + something )
+
+API Integration: 
+    	Lets Intgrated User Authentication API's
