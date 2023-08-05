@@ -57,12 +57,13 @@ span {
   font-family: 'Chirp-Regular', sans-serif !important;
 }
 
-a {
+blue {
   color: rgb(29, 155, 240);
   text-decoration: none;
 
 }
 
-a:hover {
+blue:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
