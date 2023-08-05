@@ -1,0 +1,3 @@
+User Authentication : 10 hours (6 hours for frontend, 4 hours for the backend)
+Profile : 6 hours (both backend and frontend)
+Timeline : 10 hours (both  bakend and frontend)

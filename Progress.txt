@@ -1,5 +1,7 @@
 					Excited to clone twitter (backend and fronetend)
 
+Total time spent : 4 hours 30 mins
+
 Deliverables with time estimation:( Will add estimation before starting work on a module and update 'completed_in' once done)
 
 1. Registration (alongwith google API) :
@@ -18,5 +20,9 @@ Deliverables with time estimation:( Will add estimation before starting work on 
 	expected :	3 hrs
 	* Created backend API's for login,signup,forgot_password (Will implement fotgot password onlu if time left at the end as forgot password is not mentioned in pdf.)
 	NEED A BREAK; WIll bE BACK AFTER 1 HOUR
+
+Home : 
+    FRONTEND: 
+	Created a model to new user to upload profile and set username (45 mins)
 	
 	
