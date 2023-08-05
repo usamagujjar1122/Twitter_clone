@@ -4,6 +4,7 @@ Deliverables with time estimation:( Will add estimation before starting work on 
 
 1. Registration (alongwith google API) :
 	*Expected :    3 hours
-	message : Ahh! light cut off. spent 1:45 hours to complete Ui of register page with mobile responsiveness.
-	Will commit before starting tomorrow ( GN:) )
+	`. message : Ahh! light cut off. spent 1:45 hours to complete Ui of register page with mobile responsiveness.
+	   Will commit before starting tomorrow ( GN:) )
+	2. Morning! Lets continue
 	*completed_in: ...
