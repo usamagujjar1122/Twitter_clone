@@ -16,5 +16,7 @@ Deliverables with time estimation:( Will add estimation before starting work on 
 
 	2.1. Building backend startup along with register and login API's.
 	expected :	3 hrs
+	* Created backend API's for login,signup,forgot_password (Will implement fotgot password onlu if time left at the end as forgot password is not mentioned in pdf.)
+	NEED A BREAK; WIll bE BACK AFTER 1 HOUR
 	
 	
