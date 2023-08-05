@@ -88,7 +88,7 @@ const Register = () => {
               height: '0.5px', width: '40%', color: 'rgba(0,0,0,0.05)', margin: '10px'
             },
             width: '300px',
-            alignSelf: { xs: "center", md: "center" }
+            alignSelf: { xs: "center", md: "start" }
           }}>
             < hr />
             <span>or</span>

@@ -38,7 +38,7 @@ function GoogleSignIn() {
     }}>
       <GoogleLogin
         id="google_button"
-        clientId="458412751595-7a4q3s5e84br5fcs4rmtm0lml6utg54r.apps.googleusercontent.com"
+        clientId="106563323624-69mntmu58oj16m1a5jc5hm965ohh9n6s.apps.googleusercontent.com"
         buttonText="Continue with Google"
         onSuccess={responseGoogle_success}
         onFailure={responseGoogle_failure}
