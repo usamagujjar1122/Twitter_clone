@@ -6,7 +6,7 @@ import axios from 'axios';
 import { URL } from '../../utils/url';
 import { AuthContext } from '../../Context/AuthContext.tsx';
 import { DataContext } from '../../Context/DataContext';
-const Step5 = ({ setsteps, setAlert, name, email, dob }) => {
+const Step5 = ({ showAlert, name, email, dob }) => {
   const { login } = React.useContext(AuthContext)
   const [show_password, set_show_password] = React.useState(false)
   const [password, set_password] = React.useState('')
@@ -20,10 +20,10 @@ const Step5 = ({ setsteps, setAlert, name, email, dob }) => {
         localStorage.setItem('twitter', res.data.token)
         login()
       } else {
-        setAlert('Something went wrong')
+        showAlert('Something went wrong')
       }
     } catch (error) {
-      setAlert(error.response.data.message)
+      showAlert(error.response.data.message)
     }
   }
   return (
