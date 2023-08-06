@@ -37,3 +37,4 @@ API Integration:
 	Now lets create API's for timeline and profile and integrate them
 	Profile API's created and integrated ++ Create new post API. (2 hours + something.)
 	After a break I'll be handling like animation + Like API. and then towards home page.
+	*Back to coding*
