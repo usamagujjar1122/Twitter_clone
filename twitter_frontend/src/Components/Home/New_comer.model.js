@@ -1,9 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Modal, Stack, Typography, IconButton, TextField } from '@mui/material';
-import Button from '@mui/material/Button';
-import CloseIcon from '@mui/icons-material/Close';
-import GoogleButton from '../../Elements/GoogleSignUp';
+import { Modal, Stack, Typography, IconButton, TextField, Button } from '@mui/material';
+import { AuthContext } from "../../Context/AuthContext.tsx";
 
 const style = {
   position: 'absolute',
@@ -16,7 +14,10 @@ const style = {
 
 
 
-export default function New_comer_model({ open, setopen }) {
+export default function New_comer_model() {
+  const { from } = React.useContext(AuthContext)
+  const [open, setopen] = React.useState(false)
+  const [username, setusername] = React.useState('')
   const [step, setstep] = React.useState(1)
   const handleOpen = () => {
     setopen(true);
@@ -24,7 +25,12 @@ export default function New_comer_model({ open, setopen }) {
   const handleClose = () => {
     setopen(false);
   };
-  // Lets code
+  React.useEffect(() => {
+    if (from === 'register') {
+      setopen(true)
+    }
+  }, [])
+  // Lets code.
   return (
     <div>
       <Modal
@@ -72,10 +78,9 @@ export default function New_comer_model({ open, setopen }) {
                     fontSize: '26px',
                   }}
                 >
-                  Create Your Account
+                  What would you like us to call you?
                 </Typography>
-                <TextField id="outlined-basic" label="Name" variant="outlined" />
-                <TextField id="outlined-basic" label="Name" variant="outlined" />
+                <TextField id="outlined-basic" label="Username" variant="outlined" value={username} onChange={e => setusername(e.target.value)} />
                 <Stack>
                   <Typography sx={{ fontWeight: 'bold' }}>Date of birth</Typography>
                   <Typography sx={{ fontSize: '14px', dolor: "rgba(0,0,0,0.75)" }}>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</Typography>

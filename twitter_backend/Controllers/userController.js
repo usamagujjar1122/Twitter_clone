@@ -91,7 +91,7 @@ exports.signup_step_2 = async (req, res) => {
           <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Twitter</a>
         </div>
         <p style="font-size:1.1em">Hi,</p>
-        <p>Thank you for choosing Twitter. Use the following OTP to reset your password.</p>
+        <p>Thank you for choosing Twitter. Use the following OTP to Signup.</p>
         <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${otp}</h2>
         <p style="font-size:0.9em;">Regards,<br />Twitter</p>
         <hr style="border:none;border-top:1px solid #eee" />
@@ -135,7 +135,7 @@ exports.signup_step_4 = async (req, res) => {
   try {
     const { email, name, dob, password } = req.body
     const p = await bcrypt.hash(password, 12);
-    const user = new User({ email, dob, name, p })
+    const user = new User({ email, dob, name, password: p, username: email })
     await user.save();
     const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
     return res.status(200).json({
@@ -149,63 +149,23 @@ exports.signup_step_4 = async (req, res) => {
     return res.status(400).json({ success: false, message: error.message });
   }
 }
-exports.login_via_password_step_1 = async (req, res) => {
+exports.login_via_password = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
     if (!email) {
       return res
         .status(400)
         .json({ success: false, message: "Please Enter Email" });
     }
 
-    const user = await User.findOne({ email: email });
-    if (user) {
-      // const compare = await bcrypt.compare(password, user.password);
-      // if (compare) {
-      //   const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
-      //   return res
-      //     .status(200)
-      //     .json({ success: true, message: "Login Success", data: user, token });
-      // } else {
-      //   return res
-      //     .status(400)
-      //     .json({ success: false, message: "Invalid Crediantials" });
-      // }
-      return res.status(200).json({ success: true })
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: "Not a registered user",
-      });
-    }
-  } catch (error) {
-    console.log(error)
-    return res.status(400).json({ success: false, message: error.message });
-  }
-
-};
-
-exports.login_via_password_step_2 = async (req, res) => {
-  try {
-    const { email } = req.body;
-    if (!email) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Please Enter Email" });
-    }
-    if (!password) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Please Enter Password" });
-    }
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email });
     if (user) {
       const compare = await bcrypt.compare(password, user.password);
       if (compare) {
         const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
         return res
           .status(200)
-          .json({ success: true, message: "Login Success", user, token });
+          .json({ success: true, message: "Login Success", data: user, token });
       } else {
         return res
           .status(400)
@@ -221,7 +181,8 @@ exports.login_via_password_step_2 = async (req, res) => {
     console.log(error)
     return res.status(400).json({ success: false, message: error.message });
   }
-}
+
+};
 
 
 exports.loaduser = async (req, res) => {

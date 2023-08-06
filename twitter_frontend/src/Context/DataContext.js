@@ -3,8 +3,10 @@ import * as React from 'react'
 export const DataContext = createContext(null);
 const DataProvider = ({ children }) => {
   const [user, set_user] = React.useState()
+  const [loading, setLoading] = React.useState(true)
+
   return (
-    <DataContext.Provider value={{ user, set_user }}>
+    <DataContext.Provider value={{ user, set_user, loading, setLoading }}>
       {children}
     </DataContext.Provider>
   );

@@ -4,7 +4,13 @@ import { Modal, Stack, Typography, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import GoogleButton from '../../Elements/GoogleSignUp';
-
+import { AuthContext } from '../../Context/AuthContext.tsx';
+import axios from 'axios';
+import { DataContext } from '../../Context/DataContext';
+import { URL } from '../../utils/url';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import useMediaQuery from '@mui/material/useMediaQuery';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -14,15 +20,48 @@ const style = {
   boxShadow: 24,
 };
 
-
-
 export default function LoginModel({ open, setopen }) {
-  const handleOpen = () => {
-    setopen(true);
-  };
+  const { login, setFrom } = React.useContext(AuthContext)
+  const { set_user } = React.useContext(DataContext)
+  const [email, setemail] = React.useState('')
+  const [show_password, set_show_password] = React.useState(false)
+  const [password, setpassword] = React.useState('')
+  const [alert, setAlert] = React.useState('')
+  const [timeoutId, setTimeoutId] = React.useState()
+
+  const matches = useMediaQuery('(min-width:600px)');
+
   const handleClose = () => {
     setopen(false);
   };
+
+  const showAlert = (msg) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    setAlert(msg)
+    setTimeoutId(setTimeout(() => {
+      setAlert('')
+    }, 5000)
+    )
+  }
+
+  const handleclick1 = async () => {
+    try {
+      const formdata = { email, password }
+      const res = await axios.post(`${URL}/user/login_via_password`, formdata)
+      if (res.data.success) {
+        setFrom('login')
+        set_user(res.data.user)
+        localStorage.setItem('twitter', res.data.token)
+        login()
+      } else {
+        showAlert('Something went wrong')
+      }
+    } catch (error) {
+      showAlert(error.response.data.message)
+    }
+  }
 
   return (
     <div>
@@ -93,7 +132,25 @@ export default function LoginModel({ open, setopen }) {
               <span>or</span>
               <hr />
             </Stack>
-            <TextField variant="outlined" label="Email" />
+            <TextField variant="outlined" label="Email" value={email} onChange={e => setemail(e.target.value)} size={!matches && 'small'} />
+            <Stack sx={{ position: 'relative' }}>
+              <TextField
+                variant="outlined"
+                label="Password"
+                value={password}
+                onChange={e => setpassword(e.target.value)}
+                type={show_password ? 'text' : 'password'}
+                size={!matches && 'small'}
+              />
+              {show_password ?
+                <IconButton onClick={() => set_show_password(false)} sx={{ position: 'absolute', right: '0%', top: matches ? '10px' : '0px' }}>
+                  <VisibilityOffIcon />
+                </IconButton>
+                : <IconButton onClick={() => set_show_password(true)} sx={{ position: 'absolute', right: '0%', top: matches ? '10px' : '0px' }}>
+                  <VisibilityIcon />
+                </IconButton>
+              }
+            </Stack>
             <Button
               sx={{
                 alignSelf: { xs: 'center', md: "start" },
@@ -117,6 +174,7 @@ export default function LoginModel({ open, setopen }) {
                   },
                 },
               }}
+              onClick={handleclick1}
             >
               Next
             </Button>
@@ -124,6 +182,11 @@ export default function LoginModel({ open, setopen }) {
             <Typography sx={{ color: "rgba(0,0,0,0.7)", fontSize: '14px' }}>
               Don't have an account? <a href="#">Sign Up</a>
             </Typography>
+            {alert &&
+              <Stack sx={{ padding: '10px', backgroundColor: 'rgb(29, 155, 240)', color: 'white', position: 'absolute', bottom: '0%', left: '0%', right: '0%' }}>
+                <Typography>{alert}</Typography>
+              </Stack>
+            }
           </Stack>
         </Stack>
       </Modal>

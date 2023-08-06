@@ -7,7 +7,7 @@ import { URL } from '../../utils/url';
 import { AuthContext } from '../../Context/AuthContext.tsx';
 import { DataContext } from '../../Context/DataContext';
 const Step5 = ({ showAlert, name, email, dob }) => {
-  const { login } = React.useContext(AuthContext)
+  const { login, setFrom } = React.useContext(AuthContext)
   const [show_password, set_show_password] = React.useState(false)
   const [password, set_password] = React.useState('')
   const { set_user } = React.useContext(DataContext)
@@ -16,6 +16,7 @@ const Step5 = ({ showAlert, name, email, dob }) => {
       const formdata = { email, password, name, dob }
       const res = await axios.post(`${URL}/user/signup_step_4`, formdata)
       if (res.data.success) {
+        setFrom('register')
         set_user(res.data.user)
         localStorage.setItem('twitter', res.data.token)
         login()
