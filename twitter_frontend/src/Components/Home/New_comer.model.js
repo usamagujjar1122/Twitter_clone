@@ -1,7 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Modal, Stack, Typography, IconButton, TextField, Button } from '@mui/material';
+import { Modal, Stack, Typography, Button, FormControl, InputLabel, InputAdornment, OutlinedInput } from '@mui/material';
 import { AuthContext } from "../../Context/AuthContext";
+import axios from 'axios';
+import { URL } from '../../utils/url';
+import Alert from './Alert';
 
 const style = {
   position: 'absolute',
@@ -15,22 +18,54 @@ const style = {
 
 
 export default function New_comer_model() {
-  const { from } = React.useContext(AuthContext)
+  const { from, setFrom } = React.useContext(AuthContext)
   const [open, setopen] = React.useState(false)
+  const [in_process, set_in_process] = React.useState(false)
   const [username, setusername] = React.useState('')
   const [step, setstep] = React.useState(1)
-  const handleOpen = () => {
-    setopen(true);
-  };
+  const handleclick = async () => {
+    set_in_process(true)
+    try {
+      const res = await axios.post(`${URL}/user/set_username`, { username }, {
+        headers: {
+          'token': localStorage.getItem('twitter')
+        }
+      })
+      if (res.data.success) {
+        setopen(false)
+        set_in_process(false)
+      } else {
+        showAlert("Something went wrong")
+        set_in_process(false)
+      }
+    } catch (error) {
+      showAlert(error.response.data.message)
+      set_in_process(false)
+    }
+  }
+  const [alert, setAlert] = React.useState('')
+  const [timeoutId, setTimeoutId] = React.useState()
+  const showAlert = (msg) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    setAlert(msg)
+    setTimeoutId(setTimeout(() => {
+      setAlert('')
+    }, 5000)
+    )
+  }
   const handleClose = () => {
     setopen(false);
   };
+
   React.useEffect(() => {
     if (from === 'register') {
       setopen(true)
+      setFrom('')
     }
   }, [])
-  // Lets code.
+
   return (
     <div>
       <Modal
@@ -51,7 +86,6 @@ export default function New_comer_model() {
             flexDirection: "column",
             position: 'relative',
             alignItems: 'center',
-            justifyContent: 'space-between',
             minHeight: { xs: "100vh", md: "80vh" },
             padding: { xs: '10px 30px', md: "10px 70px 10px 70px" },
             justifyContent: 'space-between',
@@ -63,7 +97,7 @@ export default function New_comer_model() {
               '& svg': {
                 width: '30px',
                 position: 'absolute',
-                top: '10px',
+                top: '20px',
                 left: '50%',
                 transform: "translateX(-50%)"
               }
@@ -80,10 +114,19 @@ export default function New_comer_model() {
                 >
                   What would you like us to call you?
                 </Typography>
-                <TextField id="outlined-basic" label="Username" variant="outlined" value={username} onChange={e => setusername(e.target.value)} />
+                <FormControl fullWidth sx={{ m: 1 }}>
+                  <InputLabel htmlFor="outlined-adornment-amount">Username</InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    startAdornment={<InputAdornment position="start">@</InputAdornment>}
+                    label="Username"
+                    value={username}
+                    onChange={e => setusername(e.target.value)}
+                  />
+                </FormControl>
                 <Stack>
-                  <Typography sx={{ fontWeight: 'bold' }}>Date of birth</Typography>
-                  <Typography sx={{ fontSize: '14px', dolor: "rgba(0,0,0,0.75)" }}>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Choose a unique username</Typography>
+                  <Typography sx={{ fontSize: '14px', dolor: "rgba(0,0,0,0.75)" }}>This will not be shown publicly. Username will be marked against each of your post. It will by your digital signature.</Typography>
                 </Stack>
               </Stack>
               <Button
@@ -109,13 +152,15 @@ export default function New_comer_model() {
                     },
                   },
                 }}
-                onClick={() => setstep(2)}
+                onClick={handleclick}
+                disabled={in_process}
               >
                 Next
               </Button>
             </>
             }
           </Stack>
+          <Alert alert={alert} />
         </Stack>
       </Modal>
     </div >

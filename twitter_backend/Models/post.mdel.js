@@ -3,9 +3,7 @@ const { Schema } = mongoose;
 
 const postModel = new mongoose.Schema({
   user: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    unique: true
+    type: String,
   },
   likes: {
     type: Array,

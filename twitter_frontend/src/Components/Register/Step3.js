@@ -6,15 +6,22 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import { URL } from '../../utils/url';
+import { useState } from 'react';
 const Step3 = ({ setsteps, name, email, dob, showAlert }) => {
+  const [in_process, set_in_process] = useState(false)
   const handleclick = async () => {
+    set_in_process(true)
     try {
       const res = await axios.post(`${URL}/user/signup_step_2`, { email })
       if (res.data.success) {
         setsteps(4)
+        set_in_process(false)
+
       }
     } catch (error) {
       showAlert(error.response.data.message)
+      set_in_process(false)
+
     }
   }
   return (
@@ -61,9 +68,14 @@ const Step3 = ({ setsteps, name, email, dob, showAlert }) => {
           backgroundColor: 'rgb(29, 155, 240)',
           '&:hover': {
             backgroundColor: 'rgb(26, 140, 226)',
+          },
+          '&[disabled]': {
+            backgroundColor: 'rgb(26, 140, 226,0.8)',
+            color: 'white'
           }
         }}
         onClick={handleclick}
+        disabled={in_process}
       >
         Sign Up
       </Button>

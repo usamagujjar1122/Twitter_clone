@@ -4,11 +4,9 @@ const otpModel = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
   },
   otp: {
     type: Number,
-    default: 1111,
   },
   createdat: {
     type: Date,

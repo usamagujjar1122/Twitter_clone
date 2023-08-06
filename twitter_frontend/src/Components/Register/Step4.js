@@ -2,7 +2,7 @@ import { Stack, Typography, TextField, Button, Menu, MenuItem } from '@mui/mater
 import * as React from 'react'
 import { URL } from '../../utils/url';
 import axios from 'axios';
-const Step4 = ({ setsteps, email, setAlert }) => {
+const Step4 = ({ setsteps, email, showAlert }) => {
   const [otp, setotp] = React.useState()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -13,16 +13,27 @@ const Step4 = ({ setsteps, email, setAlert }) => {
     setAnchorEl(null);
   };
 
+  const resend = async () => {
+    try {
+      const res = await axios.post(`${URL}/user/signup_step_2`, { email })
+      if (res.data.success) {
+        showAlert("OTP sent again!")
+      }
+    } catch (error) {
+      showAlert(error.response.data.message)
+    }
+  }
+
   const handleclick = async () => {
     try {
       const res = await axios.post(`${URL}/user/signup_step_3`, { otp, email })
       if (res.data.success) {
         setsteps(5)
       } else {
-        setAlert("Somethimg went wrong!")
+        showAlert("Somethimg went wrong!")
       }
     } catch (error) {
-      setAlert(error.response.data.message)
+      showAlert(error.response.data.message)
     }
   }
   return (<>
@@ -36,7 +47,7 @@ const Step4 = ({ setsteps, email, setAlert }) => {
         >
           We sent you a code
         </Typography>
-        <Typography sx={{ color: "rgba(0,0,0,0.7)" }}>Enter it below to verify aliraza230489q30489@gmail.com.</Typography>
+        <Typography sx={{ color: "rgba(0,0,0,0.7)" }}>Enter it below to verify {email}.</Typography>
       </Stack>
       <Stack>
         <TextField
@@ -72,10 +83,10 @@ const Step4 = ({ setsteps, email, setAlert }) => {
             'aria-labelledby': 'basic-button',
           }}
         >
-          <MenuItem onClick={handleClose} sx={{ fontWeight: 'bold' }}>Resend email</MenuItem>
+          <MenuItem onClick={() => { handleClose(); resend() }} sx={{ fontWeight: 'bold' }}>Resend email</MenuItem>
         </Menu>
       </Stack>
-    </Stack>
+    </Stack >
     <Button
       sx={{
         alignSelf: { xs: 'center', md: "start" },

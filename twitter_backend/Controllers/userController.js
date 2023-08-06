@@ -72,8 +72,8 @@ exports.signup_step_2 = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Please Send Email" });
     }
-    console.log(email)
     const otp = helper.generateOTP()
+    console.log(otp)
     const docs = await Otp.findOne({ email })
     if (docs) {
       docs.otp = otp
@@ -106,13 +106,7 @@ exports.signup_step_2 = async (req, res) => {
       </div>
     `
     })
-    if (mail) {
-      docs.otp = otp
-      docs.save()
-      res.status(200).json({ success: true, message: 'OTP sent to email address' })
-    } else {
-      return res.status(400).json({ success: false });
-    }
+    res.status(200).json({ success: true, message: 'OTP sent to email address' })
   } catch (error) {
     console.log(error)
     return res.status(400).json({ success: false, message: error.message });
@@ -155,12 +149,16 @@ exports.signup_via_google = async (req, res) => {
   try {
     const { token } = req.body
     const user_data = jwt.decode(token)
+    const pre_exists = await User.findOne({ email: user_data.email })
+    if (pre_exists) {
+      return res.status(400).json({ success: false, message: 'Email is already registered' })
+    }
     const p = await bcrypt.hash(user_data.sub, 12);
     const user = new User({
       email: user_data.email,
       name: user_data.name,
       password: p,
-      username: user_data.email
+      username: user_data.email.split('@')[0]
     })
     await user.save();
     const tokenn = jwt.sign({ _id: user._id }, "JWT_SECRET");
@@ -347,12 +345,12 @@ exports.create_post = async (req, res) => {
     if (!user) {
       res.status(400).json({ message: "Un-Authorized Attempt!" })
     }
-    const post = new Post({ user, msg })
+    const post = new Post({ user: user._id, msg })
     post.save()
     res.status(200).json({
       success: true,
+      post
     })
-    console.log(user)
   } catch (error) {
     return res.status(400).json({ success: false })
   }
@@ -360,24 +358,32 @@ exports.create_post = async (req, res) => {
 
 exports.get_profile = async (req, res) => {
   try {
-    const id = mongoose.Types.ObjectId(req.params.id)
+    const id = req.params.id
     console.log(id)
-    const user = await User.aggregate([
-      { $match: { _id: id } },
+    const user = await User.findById(id)
+    const posts = await Post.aggregate([
+      { $match: { user: id } },
       {
         $lookup: {
-          from: "posts",
-          localField: '_id',
-          foreignField: 'user',
-          as: 'posts'
+          from: 'users',
+          let: { userId: { $toObjectId: "$user" } },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", "$$userId"]
+                }
+              }
+            }
+          ],
+          as: "user"
         }
       }
     ])
-    console.log(user)
     if (!user) {
       res.status(400).json({ success: false })
     }
-    res.status(200).json({ success: true, user })
+    res.status(200).json({ success: true, user, posts })
   } catch (error) {
     return res.status(400).json({ success: false })
   }
@@ -404,24 +410,127 @@ exports.follow = async (req, res) => {
       profile
     })
   } catch (error) {
-    return res.status(200).json({ success: false, message: error.message })
+    return res.status(400).json({ success: false, message: error.message })
   }
 }
 
-// exports.get_posts = async (req, res) => {
-//   try {
-//     const { _id } = jwt.decode(req.headers.token)
-//     const user = await User.findById(_id)
-//     if (!user) {
-//       res.status(400).json({ message: "Un-Authorized Attempt!" })
-//     }
+exports.like = async (req, res) => {
+  try {
+    const { post_id } = req.body
+    const { _id } = jwt.decode(req.headers.token)
+    // const user = await User.findById(_id)
+    // if(!user){
+    //   res.status(400).json({success:false, message : 'Un-Authorized Attempt!'})
+    // }
 
-//     post.save()
-//     res.status(200).json({
-//       success: true,
-//     })
-//     console.log(user)
-//   } catch (error) {
-//     return res.status(400).json({ success: false })
-//   }
-// }
+    const post_save = await Post.findById(post_id)
+    if (post_save.likes.includes(_id)) {
+      post_save.likes.splice(post_save.likes.indexOf(_id), 1)
+    } else {
+      post_save.likes.push(_id)
+    }
+    await post_save.save()
+    const post = await Post.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(post_id) } },
+      {
+        $lookup: {
+          from: 'users',
+          let: { userId: { $toObjectId: "$user" } },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", "$$userId"]
+                }
+              }
+            }
+          ],
+          as: "user"
+        }
+      },
+    ])
+
+    return res.status(200).json({
+      success: true,
+      post: post[0]
+    })
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message })
+  }
+}
+exports.set_username = async (req, res) => {
+  try {
+    const { _id } = jwt.decode(req.headers.token)
+    const pre_exists = await User.findOne({ username: req.body.username })
+    if (pre_exists) {
+      return res.status(400).json({ success: false, message: `Username ${req.body.username} not available` })
+    }
+    const user = await User.findByIdAndUpdate(_id, { username: req.body.username })
+
+    return res.status(200).json({ success: true, messgae: 'Username Updated!' })
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message })
+  }
+
+}
+
+exports.get_posts = async (req, res) => {
+  try {
+    const { _id } = jwt.decode(req.headers.token)
+    const { currentPage, batchSize } = req.body
+    const user = await User.findById(_id)
+    if (!user) {
+      res.status(400).json({ message: "Un-Authorized Attempt!" })
+    }
+    user.following.push(_id)
+    const skipDocuments = (currentPage - 1) * batchSize;
+    const posts = await Post.aggregate([
+      { $match: { user: { $in: user.following } } },
+      {
+        $lookup: {
+          from: 'users',
+          let: { userId: { $toObjectId: "$user" } },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", "$$userId"]
+                }
+              }
+            }
+          ],
+          as: "user"
+        }
+      },
+      { $sort: { createdAt: -1 } },
+      { $skip: skipDocuments },
+      { $limit: batchSize },
+
+    ])
+    res.status(200).json({
+      success: true,
+      posts
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({ success: false, message: error.message })
+  }
+}
+
+exports.delete_post = async (req, res) => {
+  try {
+    const { post_id } = req.body
+    const { _id } = jwt.decode(req.headers.token)
+    const user = await User.findById(_id)
+    if (!user) {
+      res.status(400).json({ success: false, message: 'Un-Authorized Attempt!' })
+    }
+
+    await Post.findByIdAndDelete(post_id)
+    return res.status(200).json({
+      success: true,
+    })
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message })
+  }
+}

@@ -1,6 +1,6 @@
 					Excited to clone twitter (backend and fronetend)
 
-Total time spent : 13 hours 50 mins
+Total time spent : 19 hours
 
 Deliverables with time estimation:( Will add estimation before starting work on a module and update 'completed_in' once done)
 
@@ -38,3 +38,9 @@ API Integration:
 	Profile API's created and integrated ++ Create new post API. (2 hours + something.)
 	After a break I'll be handling like animation + Like API. and then towards home page.
 	*Back to coding*
+	FInalizing (5 hours)
+Deployment: 
+	Allright! All set. SQA fixed alot of issues. Now twitter is ready for deployment.
+
+	Will deploye backend at heroku.com
+	wILL deploye frontend at netlify.com

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Modal, Stack, Typography } from '@mui/material';
 import Steps from './Steps';
-
+import useMediaQuery from '@mui/material/useMediaQuery';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -15,6 +15,7 @@ const style = {
 
 
 export default function StepsModel({ open, setopen }) {
+  const matches = useMediaQuery('(min-width:900px)');
   const [alert, setAlert] = React.useState('')
   const [timeoutId, setTimeoutId] = React.useState()
   const showAlert = (msg) => {
@@ -56,7 +57,7 @@ export default function StepsModel({ open, setopen }) {
           overflow: 'auto',
         }}>
           {alert &&
-            <Stack sx={{ zIndex: 2, padding: '10px', backgroundColor: 'rgb(29, 155, 240)', color: 'white', position: 'absolute', bottom: { md: '0%', xs: '0%' }, left: '0%', right: '0%' }}>
+            <Stack sx={{ zIndex: 2, padding: '10px', backgroundColor: 'rgb(29, 155, 240)', color: 'white', position: !matches ? 'sticky' : 'absolute', bottom: "0%", top: !matches && '0', left: '0%', right: '0%' }}>
               <Typography>{alert}</Typography>
             </Stack>
           }

@@ -2,7 +2,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { Avatar, Button, IconButton, Stack, Typography } from '@mui/material';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import Post from '../../Components/Home/Post';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { URL } from '../../utils/url';
 import axios from 'axios'
@@ -13,6 +13,7 @@ const Profile = () => {
   const { id } = useParams()
   const { user, set_user } = useContext(DataContext)
   const [profile, setprofile] = useState()
+  const [posts, setposts] = useState([])
   const [loading, setloading] = useState(true)
   const [joined, setjoined] = useState('')
   const [follow_in_process, set_follow_in_process] = useState(false)
@@ -47,11 +48,12 @@ const Profile = () => {
           }
         })
         if (res.data.success) {
-          console.log(res.data.user)
+          console.log(res.data)
           const date = new Date(res.data.user.createdAt).toString()
           const createdAt = date.slice(4, 7) + ' ' + date.slice(11, 15)
           setjoined(createdAt)
-          setprofile(res.data.user[0])
+          setposts(res.data.posts)
+          setprofile(res.data.user)
           set_in_process(false)
           setloading(false)
         } else {
@@ -79,7 +81,7 @@ const Profile = () => {
             </IconButton>
             <Stack>
               <Typography sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{profile.name}</Typography>
-              <Typography sx={{ textAlign: 'start', fontSize: "14px", color: "rgba(0,0,0,0.6)" }}>{profile.posts.length} tweets</Typography>
+              <Typography sx={{ textAlign: 'start', fontSize: "14px", color: "rgba(0,0,0,0.6)" }}>{posts.length} tweets</Typography>
             </Stack>
           </Stack>
           <Stack sx={{ position: 'relative', width: '100%', height: { xs: "30vw", sm: "25vw", md: '15vw' }, backgroundColor: 'rgba(29, 155, 240,0.9)', borderRadius: "2px" }}>
@@ -92,11 +94,11 @@ const Profile = () => {
                 width: { xs: "17vw", sm: "15vw", md: '10vw' }
               }}
             >
-              A
+              <Typography sx={{ fontSize: '30px' }}>{profile.name.charAt(0)}</Typography>
             </Avatar>
           </Stack>
           <Stack sx={{ position: 'relative', padding: '10px', gap: '10px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-            {profile._id != user._id &&
+            {profile._id !== user._id &&
               <Button
                 sx={{
                   position: 'absolute',
@@ -151,18 +153,18 @@ const Profile = () => {
               <Typography sx={{ textAlign: 'start', fontSize: "14px", color: "rgba(0,0,0,0.6)", }}><span style={{ fontWeight: 'bold', color: 'black' }}>{profile.followers.length}</span> Followers</Typography>
             </Stack>
           </Stack >
-          <Stack>
-            {profile.posts.length > 0 ?
+          <Stack sx={{ marginBottom: '20px' }}>
+            {posts.length > 0 ?
               <>
                 {
-                  profile.posts.map((item, index) => (
+                  posts.map((item, index) => (
                     <Post item={item} key={index} />
                   ))
                 }
               </>
               :
 
-              <Typography>Nothin found</Typography>}
+              <Typography sx={{ textAlign: 'center', marginTop: '10px', color: 'rgba(0,0,0,0.5)' }}>No posts yet!</Typography>}
           </Stack>
         </Stack >
       }

@@ -3,16 +3,33 @@ import { Stack, Box, Typography, Button } from '@mui/material';
 import StepsModel from '../../Components/Register/Steps.model';
 import LoginModel from '../../Components/Login/Login.model';
 import GoogleButton from '../../Components/Register/GoogleSignUp';
+import Alert from '../../Components/Home/Alert';
 const Register = () => {
   const [open, setopen] = React.useState(false)
   const [login_open, set_login_open] = React.useState(false)
+  const [alert, setAlert] = React.useState('')
+  const [timeoutId, setTimeoutId] = React.useState()
+  const showAlert = (msg) => {
+    // Clear the previous timeout if it exists
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
 
+    setAlert(msg)
+
+    // Set a new timeout
+    setTimeoutId(setTimeout(() => {
+      setAlert('')
+    }, 5000)
+    )
+  }
   return (
     <Stack
       sx={{
         flexDirection: { xs: 'column', md: 'row' },
         width: '100vw',
         minHeight: '100vh',
+        position: 'relative'
       }}
     >
       <Box
@@ -82,7 +99,7 @@ const Register = () => {
             }}>
             Join today.
           </Typography>
-          <GoogleButton />
+          <GoogleButton showAlert={showAlert} />
           <Stack sx={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -126,7 +143,7 @@ const Register = () => {
               alignSelf: { xs: 'center', md: "start" },
 
             }}>
-            By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, including <a href="#">Cookie</a> Use.
+            By signing up, you agree to the <blue>Terms of Service</blue> and <blue>Privacy Policy</blue>, including <blue>Cookie</blue> Use.
           </Typography>
           <Stack sx={{
             width: "300px",
@@ -161,6 +178,7 @@ const Register = () => {
           </Stack>
         </Stack>
       </Stack>
+      <Alert alert={alert} />
     </Stack >
 
   );

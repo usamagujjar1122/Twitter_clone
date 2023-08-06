@@ -25,6 +25,7 @@ export default function LoginModel({ open, setopen }) {
   const { set_user } = React.useContext(DataContext)
   const [email, setemail] = React.useState('')
   const [show_password, set_show_password] = React.useState(false)
+  const [in_process, set_in_process] = React.useState(false)
   const [password, setpassword] = React.useState('')
   const [alert, setAlert] = React.useState('')
   const [timeoutId, setTimeoutId] = React.useState()
@@ -48,17 +49,21 @@ export default function LoginModel({ open, setopen }) {
 
   const handleclick1 = async () => {
     try {
+      set_in_process(true)
       const formdata = { email, password }
       const res = await axios.post(`${URL}/user/login_via_password`, formdata)
       if (res.data.success) {
+        set_in_process(false)
         setFrom('login')
         set_user(res.data.user)
         localStorage.setItem('twitter', res.data.token)
         login()
       } else {
+        set_in_process(false)
         showAlert('Something went wrong')
       }
     } catch (error) {
+      set_in_process(false)
       showAlert(error.response.data.message)
     }
   }
@@ -89,8 +94,8 @@ export default function LoginModel({ open, setopen }) {
             alignItems: 'center',
 
           }}>
-            <IconButton>
-              <CloseIcon onClick={() => { setopen(false) }} />
+            <IconButton onClick={() => { setopen(false) }}>
+              <CloseIcon />
             </IconButton>
             <Box sx={{
               width: '300px',
@@ -177,8 +182,9 @@ export default function LoginModel({ open, setopen }) {
                 },
               }}
               onClick={handleclick1}
+              disabled={!email || !password || in_process}
             >
-              Next
+              Sign In
             </Button>
 
             <Typography sx={{ color: "rgba(0,0,0,0.7)", fontSize: '14px' }}>

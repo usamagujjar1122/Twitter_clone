@@ -1,12 +1,12 @@
-import { Avatar, Stack, Input, InputTypography, IconButton, Box, Button, getListItemSecondaryActionClassesUtilityClass } from "@mui/material";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { Avatar, Stack, Button, } from "@mui/material";
 import { useContext, useState } from "react";
 import { DataContext } from "../../Context/DataContext";
 import axios from "axios";
 import { URL } from "../../utils/url";
+import { useNavigate } from "react-router-dom";
 const Create_Post = ({ showAlert }) => {
-  const { user, set_user } = useContext(DataContext)
+  const navigate = useNavigate()
+  const { user, set_new_posts } = useContext(DataContext)
   const [post, setpost] = useState('')
   const [in_process, set_in_process] = useState(false)
   const handleTextareaChange = (event) => {
@@ -24,8 +24,14 @@ const Create_Post = ({ showAlert }) => {
         }
       })
       if (res.data.success) {
+        let new_post = []
+        new_post.push(res.data.post)
+        new_post[0].user = [user]
+        set_new_posts(prev => prev.concat(new_post))
+        setpost('')
         showAlert("Tweet posted!")
         set_in_process(false)
+
       } else {
         showAlert(res.data.message)
         set_in_process(false)
@@ -39,9 +45,9 @@ const Create_Post = ({ showAlert }) => {
     <>
       {user &&
 
-        <Stack sx={{ flexDirection: 'row', gap: '10px', border: "1px solid rgba(0,0,0,0.05)", backgroundColor: in_process && 'rgba(0,0,0,0.25)', padding: "10px 20px" }}>
+        <Stack sx={{ flexDirection: 'row', gap: '10px', border: "1px solid rgba(0,0,0,0.05)", backgroundColor: in_process && 'rgba(0,0,0,0.05)', padding: "10px 20px" }}>
           <Stack sx={{ flex: 1 }}>
-            <Avatar >{user.name.charAt(0)}</Avatar>
+            <Avatar sx={{ cursor: 'pointer' }} onClick={() => { navigate(`/${user._id}`) }}>{user.name.charAt(0)}</Avatar>
           </Stack>
           <Stack sx={{ flex: 12 }}>
             <Stack sx={{ flexDirection: 'column', alignItems: 'center', gap: '3px', }}>
@@ -55,7 +61,7 @@ const Create_Post = ({ showAlert }) => {
                   width: '100%',
                   resize: 'none',
                   fontSize: '1.25rem',
-                  fontFamily: "Chirp-Regular"
+                  fontFamily: "Chirp-Regular",
                 }}
                 readOnly={in_process}
                 value={post}
