@@ -149,6 +149,30 @@ exports.signup_step_4 = async (req, res) => {
     return res.status(400).json({ success: false, message: error.message });
   }
 }
+exports.signup_via_google = async (req, res) => {
+  try {
+    const { token } = req.body
+    const user_data = jwt.decode(token)
+    const p = await bcrypt.hash(user_data.sub, 12);
+    const user = new User({
+      email: user_data.email,
+      name: user_data.name,
+      password: p,
+      username: user_data.email
+    })
+    await user.save();
+    const tokenn = jwt.sign({ _id: user._id }, "JWT_SECRET");
+    return res.status(200).json({
+      success: true,
+      message: "Account Created Successfully",
+      token: tokenn,
+      user
+    });
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({ success: false, message: error.message });
+  }
+}
 exports.login_via_password = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -161,6 +185,37 @@ exports.login_via_password = async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       const compare = await bcrypt.compare(password, user.password);
+      if (compare) {
+        const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
+        return res
+          .status(200)
+          .json({ success: true, message: "Login Success", data: user, token });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid Crediantials" });
+      }
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Not a registered user",
+      });
+    }
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({ success: false, message: error.message });
+  }
+
+};
+
+
+exports.login_via_google = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const user_data = jwt.decode(token)
+    const user = await User.findOne({ email: user_data.email });
+    if (user) {
+      const compare = await bcrypt.compare(user_data.sub, user.password);
       if (compare) {
         const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
         return res

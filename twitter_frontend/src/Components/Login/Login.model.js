@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import { Modal, Stack, Typography, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
-import GoogleButton from '../../Elements/GoogleSignUp';
 import { AuthContext } from '../../Context/AuthContext.tsx';
 import axios from 'axios';
 import { DataContext } from '../../Context/DataContext';
@@ -11,6 +10,7 @@ import { URL } from '../../utils/url';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import GoogleButton from './GoogleLogin.js';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -70,6 +70,9 @@ export default function LoginModel({ open, setopen }) {
         onClose={handleClose}
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
+        sx={{
+          overflowY: 'scroll'
+        }}
       >
         <Stack sx={{
           ...style,
@@ -77,7 +80,6 @@ export default function LoginModel({ open, setopen }) {
           minHeight: { xs: "100%", md: "80%" },
           borderRadius: { xs: "none", md: '10px' },
           outline: 'none',
-
         }}>
           <Stack sx={{
             flexDirection: "row",
@@ -180,7 +182,7 @@ export default function LoginModel({ open, setopen }) {
             </Button>
 
             <Typography sx={{ color: "rgba(0,0,0,0.7)", fontSize: '14px' }}>
-              Don't have an account? <a href="#">Sign Up</a>
+              Don't have an account? <blue onClick={() => setopen(false)}>Sign Up</blue>
             </Typography>
             {alert &&
               <Stack sx={{ padding: '10px', backgroundColor: 'rgb(29, 155, 240)', color: 'white', position: 'absolute', bottom: '0%', left: '0%', right: '0%' }}>

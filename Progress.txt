@@ -1,6 +1,6 @@
 					Excited to clone twitter (backend and fronetend)
 
-Total time spent : 11 hours 0 mins
+Total time spent : 11 hours 30 mins
 
 Deliverables with time estimation:( Will add estimation before starting work on a module and update 'completed_in' once done)
 
@@ -33,4 +33,5 @@ API Integration:
     	Lets Intgrated User Authentication API's
 	Integrated Sign_Up and loaduser API's, modified UI for mobile responsiveness (still nedd some modifications), Alert message at bottom.
 	Login API integrated along with welcome alert, ande new_comer_modal. (1 hour).
-	Lets Handle Sign_Up and LogIn via Google Login button.
+	Lets Handle Sign_Up and LogIn via Google Login button. (1 hour)
+	Now lets create API's for timeline and profile and integrate them

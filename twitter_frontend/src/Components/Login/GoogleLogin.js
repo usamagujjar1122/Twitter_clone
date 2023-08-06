@@ -30,9 +30,9 @@ const GoogleButton = ({ shwoALert }) => {
   const [loading, setLoading] = useState(true)
   const handlesubmit = async (response) => {
     try {
-      const res = await axios.post(`${URL}/user/signup_via_google`, { token: response.credential })
+      const res = await axios.post(`${URL}/user/login_via_google`, { token: response.credential })
       if (res.data.success) {
-        setFrom('register')
+        setFrom('login')
         set_user(res.data.user)
         localStorage.setItem('twitter', res.data.token)
         login()
@@ -58,7 +58,6 @@ const GoogleButton = ({ shwoALert }) => {
       }}>
         {loading && <Spinner style={{ position: 'absolute', top: '30%', left: '140px', transform: "translate(-50%,-50%)", width: '20px', height: '20px' }} />}
         <GoogleLogin
-          text="signup_with"
           onSuccess={response => {
             handlesubmit(response)
           }}

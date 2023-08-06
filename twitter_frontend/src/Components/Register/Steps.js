@@ -18,7 +18,6 @@ const Steps = ({ setopen, showAlert }) => {
         gap: "28px",
         padding: { xs: "8px", md: '10px' },
         alignItems: 'center',
-        flex: 1
       }}>
         <IconButton>
           <CloseIcon onClick={() => { setopen(false) }} />
@@ -30,7 +29,7 @@ const Steps = ({ setopen, showAlert }) => {
           }}>{`Step ${steps} of 5`}
         </Typography>
       </Stack >
-      <Stack sx={{ flex: 4, padding: { xs: '10px 20px', sm: "10px 40px", md: "30px 70px 30px 70px" }, justifyContent: 'space-between', gap: "40px", minHeight: '70vh' }}>
+      <Stack sx={{ padding: { xs: '10px 20px', sm: "10px 40px", md: "30px 70px 30px 70px" }, justifyContent: 'space-between', gap: "40px" }}>
         {steps === 1 && <Step1 setsteps={setsteps} showAlert={showAlert} name={name} dob={dob} email={email} setname={setname} setemail={setemail} setdob={setdob} />}
         {steps === 2 && <Step2 setsteps={setsteps} showAlert={showAlert} />}
         {steps === 3 && <Step3 setsteps={setsteps} showAlert={showAlert} name={name} dob={dob} email={email} />}

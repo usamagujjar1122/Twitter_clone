@@ -33,7 +33,7 @@ const Timeline = () => {
     }
   }, [])
   return (
-    <Stack sx={{ maxWidth: '600px', margin: 'auto' }}>
+    <Stack sx={{ maxWidth: '600px', margin: 'auto', position: 'relative' }}>
       <Nav />
       <Create_Post />
       <Post />

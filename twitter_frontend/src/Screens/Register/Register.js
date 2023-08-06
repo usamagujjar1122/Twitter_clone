@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Stack, Box, Typography, Button } from '@mui/material';
-import GoogleButton from '../../Elements/GoogleSignUp';
 import StepsModel from '../../Components/Register/Steps.model';
 import LoginModel from '../../Components/Login/Login.model';
+import GoogleButton from '../../Components/Register/GoogleSignUp';
 const Register = () => {
   const [open, setopen] = React.useState(false)
   const [login_open, set_login_open] = React.useState(false)
