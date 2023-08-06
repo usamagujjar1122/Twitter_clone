@@ -4,11 +4,14 @@ import Post from "../../Components/Home/Post";
 import Create_Post from "../../Components/Home/Create_Post";
 import { useContext, useEffect, useState } from "react";
 import New_comer_model from "../../Components/Home/New_comer.model";
-import { AuthContext } from "../../Context/AuthContext.tsx";
+import { AuthContext } from "../../Context/AuthContext";
 import Alert from "../../Components/Home/Alert";
+import { DataContext } from "../../Context/DataContext";
+import Post_List from "../../Components/Home/Post_List";
 
 const Timeline = () => {
   const { from } = useContext(AuthContext)
+  const { user } = useContext(DataContext)
   const [alert, setAlert] = useState('')
   const [timeoutId, setTimeoutId] = useState()
   const showAlert = (msg) => {
@@ -33,14 +36,18 @@ const Timeline = () => {
     }
   }, [])
   return (
-    <Stack sx={{ maxWidth: '600px', margin: 'auto', position: 'relative' }}>
-      <Nav />
-      <Create_Post />
-      <Post />
-      <New_comer_model />
-      <Alert alert={alert} />
+    <>
+      {user &&
+        <Stack sx={{ position: 'relative', maxWidth: '600px', margin: 'auto', minHeight: '100vh' }}>
+          <Nav />
+          <Create_Post showAlert={showAlert} />
+          <Post_List />
 
-    </Stack>
+          <New_comer_model />
+          <Alert alert={alert} />
+        </Stack>
+      }
+    </>
   );
 }
 

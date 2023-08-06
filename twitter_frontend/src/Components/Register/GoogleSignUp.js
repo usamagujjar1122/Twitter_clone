@@ -6,7 +6,7 @@ import Spinner from '../Spinner/Spinner';
 import axios from 'axios';
 import { URL } from '../../utils/url';
 import Alert from '../Home/Alert';
-import { AuthContext } from '../../Context/AuthContext.tsx';
+import { AuthContext } from '../../Context/AuthContext';
 import { DataContext } from '../../Context/DataContext';
 const GoogleButton = ({ shwoALert }) => {
   const { login, setFrom } = React.useContext(AuthContext)

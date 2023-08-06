@@ -4,13 +4,13 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import * as React from 'react'
 import axios from 'axios';
 import { URL } from '../../utils/url';
-import { AuthContext } from '../../Context/AuthContext.tsx';
+import { AuthContext } from '../../Context/AuthContext';
 import { DataContext } from '../../Context/DataContext';
 const Step5 = ({ showAlert, name, email, dob }) => {
   const { login, setFrom } = React.useContext(AuthContext)
+  const { set_user } = React.useContext(DataContext)
   const [show_password, set_show_password] = React.useState(false)
   const [password, set_password] = React.useState('')
-  const { set_user } = React.useContext(DataContext)
   const handleclick = async () => {
     try {
       const formdata = { email, password, name, dob }

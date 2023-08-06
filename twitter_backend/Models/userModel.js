@@ -25,6 +25,14 @@ const userModel = new mongoose.Schema({
         type: Number,
         default: 1111,
     },
+    followers: {
+        type: Array,
+        default: []
+    },
+    following: {
+        type: Array,
+        default: []
+    },
     createdat: {
         type: Date,
         default: Date.now

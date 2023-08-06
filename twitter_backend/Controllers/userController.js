@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt_decode = require("jwt-decode");
 const helper = require('../utils/helper');
 const { transporter } = require("../utils/mailer");
+const Post = require("../Models/post.mdel");
+var mongoose = require('mongoose');
 require('dotenv').config();
 
 exports.test = async (req, res) => {
@@ -135,7 +137,7 @@ exports.signup_step_4 = async (req, res) => {
   try {
     const { email, name, dob, password } = req.body
     const p = await bcrypt.hash(password, 12);
-    const user = new User({ email, dob, name, password: p, username: email })
+    const user = new User({ email, dob, name, password: p, username: email.split('@')[0] })
     await user.save();
     const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
     return res.status(200).json({
@@ -220,7 +222,7 @@ exports.login_via_google = async (req, res) => {
         const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
         return res
           .status(200)
-          .json({ success: true, message: "Login Success", data: user, token });
+          .json({ success: true, message: "Login Success", user, token });
       } else {
         return res
           .status(400)
@@ -241,13 +243,13 @@ exports.login_via_google = async (req, res) => {
 
 
 exports.loaduser = async (req, res) => {
-  const token = req.headers.token;
+  const token = req.headers.x_auth;
   if (token) {
     var data = jwt_decode(token);
     try {
       const docs = await User.findById(data._id)
       if (docs) {
-        res.status(200).json({ success: true, data: docs, token: token })
+        res.status(200).json({ success: true, user: docs, token: token })
       } else {
         res.status(400).json({ success: false })
       }
@@ -336,3 +338,90 @@ exports.forgot_step_3 = async (req, res) => {
     return res.status(400).json({ success: false, message: error.message });
   }
 };
+
+exports.create_post = async (req, res) => {
+  try {
+    const msg = req.body.post
+    const { _id } = jwt.decode(req.headers.token)
+    const user = await User.findById(_id)
+    if (!user) {
+      res.status(400).json({ message: "Un-Authorized Attempt!" })
+    }
+    const post = new Post({ user, msg })
+    post.save()
+    res.status(200).json({
+      success: true,
+    })
+    console.log(user)
+  } catch (error) {
+    return res.status(400).json({ success: false })
+  }
+}
+
+exports.get_profile = async (req, res) => {
+  try {
+    const id = mongoose.Types.ObjectId(req.params.id)
+    console.log(id)
+    const user = await User.aggregate([
+      { $match: { _id: id } },
+      {
+        $lookup: {
+          from: "posts",
+          localField: '_id',
+          foreignField: 'user',
+          as: 'posts'
+        }
+      }
+    ])
+    console.log(user)
+    if (!user) {
+      res.status(400).json({ success: false })
+    }
+    res.status(200).json({ success: true, user })
+  } catch (error) {
+    return res.status(400).json({ success: false })
+  }
+}
+
+exports.follow = async (req, res) => {
+  try {
+    const { _id } = jwt.decode(req.headers.token)
+    const profile_id = req.body.follow_him
+    const profile = await User.findById(profile_id)
+    const user = await User.findById(_id)
+    if (user.following.includes(profile_id)) {
+      user.following.splice(user.following.indexOf(profile_id), 1)
+      profile.followers.splice(profile.followers.indexOf(_id), 1)
+    } else {
+      user.following.push(profile_id)
+      profile.followers.push(_id)
+    }
+    await profile.save()
+    await user.save()
+    return res.status(200).json({
+      success: true,
+      user,
+      profile
+    })
+  } catch (error) {
+    return res.status(200).json({ success: false, message: error.message })
+  }
+}
+
+// exports.get_posts = async (req, res) => {
+//   try {
+//     const { _id } = jwt.decode(req.headers.token)
+//     const user = await User.findById(_id)
+//     if (!user) {
+//       res.status(400).json({ message: "Un-Authorized Attempt!" })
+//     }
+
+//     post.save()
+//     res.status(200).json({
+//       success: true,
+//     })
+//     console.log(user)
+//   } catch (error) {
+//     return res.status(400).json({ success: false })
+//   }
+// }

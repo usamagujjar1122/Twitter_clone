@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Modal, Stack, Typography, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
-import { AuthContext } from '../../Context/AuthContext.tsx';
+import { AuthContext } from '../../Context/AuthContext';
 import axios from 'axios';
 import { DataContext } from '../../Context/DataContext';
 import { URL } from '../../utils/url';

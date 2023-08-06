@@ -1,12 +1,13 @@
 import './App.css';
 
 import Timeline from './Screens/Home/Timeline';
+import Profile from './Screens/Home/Profile';
 import Register from './Screens/Register/Register.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import * as React from 'react'
 import { URL } from './utils/url';
 import axios from 'axios'
-import { AuthContext } from './Context/AuthContext.tsx';
+import { AuthContext } from './Context/AuthContext';
 import { Stack } from '@mui/material';
 import { DataContext } from './Context/DataContext';
 function App() {
@@ -26,11 +27,14 @@ function App() {
           if (res.data.success) {
             set_user(res.data.user)
             login();
+            setLoading(false);
           }
         } catch (error) {
+          localStorage.removeItem('twitter')
           setLoading(false);
         }
       } else {
+        localStorage.removeItem('twitter')
         setLoading(false);
       }
     }
@@ -49,6 +53,7 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<Timeline />}></Route>
+                <Route path="/:id" element={<Profile />}></Route>
               </Routes>
             </Router>
             :

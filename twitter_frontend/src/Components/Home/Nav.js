@@ -2,7 +2,7 @@ import { IconButton, Stack, Typography } from "@mui/material";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useContext } from "react";
-import { AuthContext } from "../../Context/AuthContext.tsx";
+import { AuthContext } from "../../Context/AuthContext";
 const Nav = () => {
   const { logout } = useContext(AuthContext)
   return (

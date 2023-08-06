@@ -1,7 +1,24 @@
 import { Avatar, Stack, Typography, IconButton, Box } from "@mui/material";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-const Post = () => {
+import axios from 'axios'
+import { URL } from "../../utils/url";
+const Post = ({ item }) => {
+  const like = async () => {
+    // set_follow_in_process(true)
+    try {
+      const res = await axios.post(`${URL}/user/like`, { like_it: item._id }, {
+        headers: {
+          'token': localStorage.getItem('twitter')
+        }
+      })
+      if (res.data.success) {
+      } else {
+
+      }
+    } catch (error) {
+    }
+  }
   return (
     <>
       <Stack sx={{ flexDirection: 'row', gap: '10px', border: "1px solid rgba(0,0,0,0.05)", padding: "10px 20px" }}>
@@ -18,19 +35,30 @@ const Post = () => {
           </Stack>
           <Stack>
             <Typography sx={{ textAlign: 'start', color: 'rgba(0,0,0,0.65)' }}>
-              I know some people hate on them, but I have to credit the whole
-              @Starbucks
-              team with reliably serving millions of coffees & snacks every day around the world
+              {item.msg}
             </Typography>
           </Stack>
           <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: '4px' }}>
-            <IconButton sx={{ poaddingLeft: '0px' }}>
-              <FavoriteBorderIcon sx={{ fontSize: '16px' }} />
+            <IconButton
+              sx={{
+                poaddingLeft: '0px',
+                '&:hover': {
+                  backgroundColor: 'rgba(256,0,0,0.1)',
+                  color: "red"
+                }
+              }}
+              onClick={like}
+            >
+              <FavoriteBorderIcon
+                sx={{
+                  fontSize: '16px',
+                }}
+              />
             </IconButton>
-            <Typography sx={{ fontSize: '12px', color: 'rgba(0,0,0,0.65)' }}>10.5k</Typography>
+            <Typography sx={{ fontSize: '12px', color: 'rgba(0,0,0,0.65)' }}>{item.likes.length > 0 && item.likes.length}</Typography>
           </Stack>
         </Stack>
-      </Stack>
+      </Stack >
     </>
   );
 }

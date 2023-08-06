@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Modal, Stack, Typography, IconButton, TextField, Button } from '@mui/material';
-import { AuthContext } from "../../Context/AuthContext.tsx";
+import { AuthContext } from "../../Context/AuthContext";
 
 const style = {
   position: 'absolute',
