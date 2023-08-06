@@ -1,0 +1,9 @@
+Frontend : 
+	1. Run "npm install"
+	2. Run "npm start" 
+	*Thats all*
+
+Backend : 
+	.env file is attached with project submission email. Paste it in root directory of twitter_backend and then:
+	1. Run "npm install"
+	2. Run "npm start" 

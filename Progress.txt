@@ -42,5 +42,8 @@ API Integration:
 Deployment: 
 	Allright! All set. SQA fixed alot of issues. Now twitter is ready for deployment.
 
-	Will deploye backend at heroku.com
-	wILL deploye frontend at netlify.com
+	Will deploy backend at heroku.com
+	wILL deploy frontend at netlify.com
+
+	Just noticed that there is no need to deploy code anywhere.
+	Adding instructions.txt about how to run project.
